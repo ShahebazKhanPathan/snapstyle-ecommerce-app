@@ -44,11 +44,11 @@ const Products = () => {
             .then(() => {
                 setLoader(false);
                 setAlert("Product removed successfully!");
-                getProducts()
+                getProducts();
             })
             .catch((err) => {
                 setLoader(false);
-                setError(err.message)
+                setError(err.message);
             });
     }
 
@@ -95,12 +95,12 @@ const Products = () => {
 
     return (
         <SimpleGrid paddingX={5}>
-            {loader && <Spinner className="mb-3"/>}
-            {error && <Alert status="error" className="mb-3">
+            { loader && <Spinner className="mb-3"/>}
+            { error && <Alert status="error" className="mb-3">
                 <AlertIcon />
                 {error}
             </Alert>}
-            {alert && <Alert status="success" className="mb-3">
+            { alert && <Alert status="success" className="mb-3">
                 <AlertIcon />
                 {alert}
             </Alert>}
@@ -117,6 +117,7 @@ const Products = () => {
                             <option value="Appliances">Appliances</option>
                             <option value="Furniture">Furniture</option>
                             <option value="Toys">Toys</option>
+                            <option value="Eyewear">Eyewear</option>
                         </Select>
                         {errors.category && <p className="text-danger">{errors.category?.message}</p>}
                     </div>
@@ -148,7 +149,7 @@ const Products = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {products.map((product) =>
+                            { products.map((product) =>
                                 <Tr key={product._id}>
                                     <Td>{product.title}</Td>
                                     <Td>{product.category}</Td>

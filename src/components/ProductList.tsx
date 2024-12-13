@@ -43,7 +43,7 @@ const ProductList = () => {
 
     return (
         <>
-            {loadingSkeleton &&
+            { loadingSkeleton &&
                 <SimpleGrid spacing={4} columns={commonStyles.productList.gridColumns}>
                     {commonStyles.productList.skeletons.map((skeleton) =>
                         <Card key={skeleton}>

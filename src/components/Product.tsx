@@ -39,15 +39,22 @@ const Product = () => {
             });
     }
 
-    const addtoCart = async() => {
+    const addtoCart = async () => {
 
         if (!localStorage.getItem("auth-token")) return location.href = "/signin?page=product&pid=" + id;
         setLoader(true);
         
         await apiClient.post(
             "/api/cart",
-            { pId: id },
-            { headers: { "auth-token": localStorage.getItem("auth-token")}}
+            {
+                pId: id,
+                name: product?.title,
+                price: product?.price,
+                photo: product?.photo.name
+            },
+            {
+                headers: { "auth-token": localStorage.getItem("auth-token") }
+            }
         ).then(() => {
             setCount(1);
             setLoader(false);
@@ -88,48 +95,46 @@ const Product = () => {
 
             {product && 
                 <>
-                {alert &&
-                    <Alert status="success" mb={4} fontSize={commonStyles.fontSizes}>
-                        <AlertIcon />
-                        <AlertTitle>Added!</AlertTitle>
-                        <AlertDescription>Check your cart.</AlertDescription>
-                    </Alert>
-                }
-                {error &&
-                    <Alert status="error" mb={4} fontSize={commonStyles.fontSizes}>
-                        <AlertIcon />
-                        <AlertTitle>Error:</AlertTitle>
-                        <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                }
-                <SimpleGrid columns={commonStyles.product.gridColumns} paddingY={2} paddingX={2} spacing={5}>
-                    <Box>
-                        <Center>
-                            <Image boxSize={commonStyles.product.boxSizes} objectFit="contain" src={"https://snapstyle.s3.us-west-1.amazonaws.com/"+product?.photo.name} />
-                        </Center>
-                    </Box>
-                    <Box>
-                        <Text fontWeight={600} fontSize={commonStyles.product.headingSizes} mb={5}>{product?.title}</Text>
-                        <Text fontWeight={600} fontSize={commonStyles.fontSizes} >Description</Text>
-                        <Text fontSize={commonStyles.fontSizes} textAlign="justify">{product?.description}</Text>
-                        <HStack mb={3}>
-                            <Text fontSize={commonStyles.product.priceLabelSizes} fontWeight={500}>${product?.price}</Text>
-                            <Text fontSize={commonStyles.fontSizes} color="green">50% off</Text>
-                        </HStack>
-                        <Center>
-                            <HStack spacing={5}>
-                                <Button isLoading={loader} onClick={() => addtoCart()} colorScheme="yellow" size={commonStyles.product.buttonSizes} leftIcon={<FaShoppingCart/>}>Add to Cart</Button>
-                                <Link to={"/payment?pid="+id}><Button colorScheme="green" size={commonStyles.product.buttonSizes}  leftIcon={<HiMiniCurrencyDollar size="20px"/>}>Buy Now</Button></Link>
+                    {alert &&
+                        <Alert status="success" mb={4} fontSize={commonStyles.fontSizes}>
+                            <AlertIcon />
+                            <AlertTitle>Added!</AlertTitle>
+                            <AlertDescription>Check your cart.</AlertDescription>
+                        </Alert>
+                    }
+                    {error &&
+                        <Alert status="error" mb={4} fontSize={commonStyles.fontSizes}>
+                            <AlertIcon />
+                            <AlertTitle>Error:</AlertTitle>
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    }
+                    <SimpleGrid columns={commonStyles.product.gridColumns} paddingY={2} paddingX={2} spacing={5}>
+                        <Box>
+                            <Center>
+                                <Image boxSize={commonStyles.product.boxSizes} objectFit="contain" src={"https://snapstyle.s3.us-west-1.amazonaws.com/"+product?.photo.name} />
+                            </Center>
+                        </Box>
+                        <Box>
+                            <Text fontWeight={600} fontSize={commonStyles.product.headingSizes} mb={5}>{product?.title}</Text>
+                            <Text fontWeight={600} fontSize={commonStyles.fontSizes}>Description</Text>
+                            <Text fontSize={commonStyles.fontSizes} textAlign="justify">{product?.description}</Text>
+                            <HStack mb={3}>
+                                <Text fontSize={commonStyles.product.priceLabelSizes} fontWeight={500}>${product?.price}</Text>
+                                <Text fontSize={commonStyles.fontSizes} color="green">50% off</Text>
                             </HStack>
-                        </Center>
-
-                    </Box>
-                </SimpleGrid>
-                <Divider />
+                            <Center>
+                                <HStack spacing={5}>
+                                    <Button isLoading={loader} onClick={() => addtoCart()} colorScheme="yellow" size={commonStyles.product.buttonSizes} leftIcon={<FaShoppingCart/>}>Add to Cart</Button>
+                                    <Link to={"/payment?pid="+id}><Button colorScheme="green" size={commonStyles.product.buttonSizes}  leftIcon={<HiMiniCurrencyDollar size="20px"/>}>Buy Now</Button></Link>
+                                </HStack>
+                            </Center>
+                        </Box>
+                    </SimpleGrid>
+                    <Divider />
                 </>
             }
         </>
-        
     )
 }
 

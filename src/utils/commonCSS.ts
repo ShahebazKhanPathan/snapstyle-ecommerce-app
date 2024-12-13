@@ -46,7 +46,6 @@ const commonStyles = {
         priceLabelSizes: { base: "22px", sm: "22px", md: "24px", lg: "28px", xl: "28px" },
         buttonSizes: { base: 'sm', sm: 'sm', md: 'md', lg: 'md' }
     }
-
 }
 
 export default commonStyles;

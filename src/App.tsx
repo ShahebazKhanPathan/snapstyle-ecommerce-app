@@ -1,4 +1,5 @@
-import { Grid, GridItem, Box, Button, Image, Show, Hide, Menu, MenuButton, MenuList, MenuItem, IconButton, Stack, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerCloseButton, List, ListItem, Icon} from "@chakra-ui/react"
+// Load required components
+import { Grid, GridItem, Box, Button, Image, Show, Hide, Menu, MenuButton, MenuList, MenuItem, IconButton, Stack, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerCloseButton, List, ListItem, Icon } from "@chakra-ui/react"
 import SearchBar from "./components/SearchBar"
 import CategoryList from "./components/CategoryList"
 import { FaChevronDown, FaUserCircle, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
@@ -10,6 +11,8 @@ import { MdAdminPanelSettings } from "react-icons/md";
 import { IoCube, IoMenu } from "react-icons/io5";
 import { Link, Outlet, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// Load services
 import apiClient from "./services/api-client";
 import commonStyles from "./utils/commonCSS";
 
@@ -23,7 +26,6 @@ const token = localStorage.getItem('auth-token');
 
 function App() {
   
-  const [isToken, setToken] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
@@ -32,7 +34,6 @@ function App() {
       { headers: { "auth-token": localStorage.getItem('auth-token') } })
       .then(() => {
         localStorage.removeItem("auth-token");
-        setToken(false);
         window.location.href="/";
       })
       .catch((err) => console.log(err));
@@ -42,16 +43,16 @@ function App() {
     if (token) {
       await apiClient.get("/api/blacklist", { headers: { "auth-token": localStorage.getItem('auth-token') } })
         .then(({ data }) => {
-          setCartCount(data.length);
-          setToken(true)
+          console.log(data);
+          setCartCount(data.cartItemsCount);
         })
-      .catch(() => setToken(false));
+      .catch((err) => console.log(err));
     }
   }
 
   useEffect(() => {
     checkTokenExpiry();
-  });
+  },[]);
 
   return (
     <>
@@ -133,7 +134,7 @@ function App() {
         </Hide>
 
         <GridItem colSpan={{base: 3, sm: 3, md: 2, lg: 2, xl: 2}}>
-          {isToken
+          {token
             ?
             <Box textAlign={{base: "right", xl: "center"}} mr={{base: "10px"}}>
               <Link to={"/cart"}>

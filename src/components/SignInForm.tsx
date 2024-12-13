@@ -21,9 +21,9 @@ const SignInForm = () => {
     const onSubmit = (data: User) => {
         setError('');
         setLoader(true);
-        apiClient.post("/api/auth", data) 
+        apiClient.post("/api/users/sign-in", data) 
             .then(({ data }) => {
-                localStorage.setItem("auth-token", data);
+                localStorage.setItem("auth-token", data.token);
                 setLoader(false);
                 if (params.get('page') == 'payment' && params.get('pid')) {
                     location.href = "/payment?pid="+params.get('pid');

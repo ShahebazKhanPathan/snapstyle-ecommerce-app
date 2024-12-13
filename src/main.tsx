@@ -19,6 +19,7 @@ import Orders from './components/Orders.tsx'
 import Category from './components/Category.tsx'
 import Cart from './components/Cart.tsx'
 import SearchResults from './components/SearchResults.tsx'
+import Success from './components/Success.tsx'
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
         element: <SearchResults/>
       }
     ]
+  },
+  {
+    path: "/payment-success",
+    element: <Success/>
   },
   {
     path: "/admin",

@@ -25,7 +25,7 @@ const Orders = () => {
     return (
         <SimpleGrid paddingX={5}>
             <Heading size="md">Orders ({orders.length})</Heading>
-            {orders.length>0 ? 
+            {orders.length > 0 ? 
                 <TableContainer padding={5}>
                     <Table variant="simple">
                         <Thead>

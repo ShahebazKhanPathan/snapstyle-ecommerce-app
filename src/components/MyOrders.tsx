@@ -19,11 +19,27 @@ export interface Info{
     total: number
 }
 
+interface Order{
+    orderId: string,
+    orderStatus: string,
+    totalPrice: number,
+    totalTaxes: number,
+    totalAmount: number,
+    items: [
+        {
+            pId: string,
+            name: string,
+            price: number,
+            photo: string
+        }
+    ]
+}
+
 const MyOrders = () => {
 
     const token = localStorage.getItem("auth-token");
     if (!token) return <Navigate to={"/"}/>;
-    const [orders, setOrders] = useState<Info[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
 
     const getMyOrders = async() => {
         await apiClient.get(
@@ -31,8 +47,8 @@ const MyOrders = () => {
             { headers: { "auth-token": token } }
         )
             .then(({ data }) => {
-                setOrders(data);
-                console.log(data)
+                setOrders(data.data);
+                console.log(data.data);
             })
             .catch((err) => console.log(err.message));
     }
@@ -45,22 +61,33 @@ const MyOrders = () => {
         <>
             <Text px={2} fontWeight={500} fontSize={commonStyles.fontSizes}>My Orders ({orders.length})</Text>
             <SimpleGrid paddingX={5} spacing={4}>
-                {orders.map((order) => 
+                { orders.map((order) => 
                     <Card>
                         <CardBody>
+                            <Text fontSize={commonStyles.fontSizes}>Order ID: {order.orderId}</Text>
                             <Grid templateColumns="repeat(4, 1fr)">
                                 <GridItem colSpan={3}>
-                                    <Text fontSize={commonStyles.fontSizes} fontWeight={600}>{order.title}</Text>
-                                    <Text fontSize={commonStyles.fontSizes}>Order ID: {order._id}</Text>
+                                    <Text>Payment Status: {order.orderStatus}</Text>
+                                    {
+                                        order.items.map((item) =>
+                                            <>
+                                                <Text>Item name: {item.name}</Text>
+                                                <Text>Item price: {item.price}</Text>
+                                            </>
+                                        )
+                                    }
                                 </GridItem>
                                 <GridItem colSpan={1}>
-                                    <Image boxSize={"100px"} objectFit="contain" src={"https://snapstyle.s3.us-west-1.amazonaws.com/"+order.image}/>
+                                    {
+                                        order.items.map((item) => 
+                                            <Image boxSize={"100px"} objectFit="contain" src={"https://snapstyle.s3.us-west-1.amazonaws.com/"+item.photo}/>
+                                        )
+                                    }
                                 </GridItem>
                             </Grid>
                             </CardBody>
                     </Card>
-                )
-                }
+                )}
             </SimpleGrid>
         </>
     );
